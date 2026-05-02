@@ -222,63 +222,18 @@ export interface ExerciseEntry {
     createdAt: string
 }
 
-/*
-========================================
-Dexie Database
-========================================
-*/
-
-export class WorkoutLoggerDatabase extends Dexie {
-    sessions!: EntityTable<WorkoutSession, 'id'>
-    exerciseDefinitions!: EntityTable<ExerciseDefinition, 'id'>
-    sessionExercises!: EntityTable<SessionExercise, 'id'>
-    exerciseEntries!: EntityTable<ExerciseEntry, 'id'>
-
-    constructor() {
-        super('WorkoutLoggerDatabase')
-
-        this.version(1).stores({
-            /*
-      Sessions
-      */
-            sessions: `
-        ++id,
-        date,
-        name,
-        createdAt
-      `,
-
-            /*
-      Master Exercise Catalog
-      */
-            exerciseDefinitions: `
-        ++id,
-        name,
-        category,
-        isCustom
-      `,
-
-            /*
-      Session -> Exercise relationship
-      */
-            sessionExercises: `
-        ++id,
-        sessionId,
-        exerciseDefinitionId,
-        order
-      `,
-
-            /*
-      Actual logged performance rows
-      */
-            exerciseEntries: `
-        ++id,
-        sessionExerciseId,
-        entryType,
-        createdAt
-      `,
-        })
-    }
+const db = new Dexie('WorkoutLoggerDatabase') as Dexie & {
+    sessions: EntityTable<WorkoutSession, 'id'>
+    exerciseDefinitions: EntityTable<ExerciseDefinition, 'id'>
+    sessionExercises: EntityTable<SessionExercise, 'id'>
+    exerciseEntries: EntityTable<ExerciseEntry, 'id'>
 }
 
-export const db = new WorkoutLoggerDatabase()
+db.version(1).stores({
+    sessions: '++id, date, name, createdAt',
+    exerciseDefinitions: '++id, name, category, isCustom',
+    sessionExercises: '++id, sessionId, exerciseDefinitionId, order',
+    exerciseEntries: '++id, sessionExerciseId, entryType, createdAt',
+})
+
+export default db
