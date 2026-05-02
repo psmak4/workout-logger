@@ -1,4 +1,4 @@
-import { Dexie, type EntityTable } from "dexie"
+import { Dexie, type EntityTable } from 'dexie'
 
 /*
 ========================================
@@ -6,20 +6,9 @@ Enums / Literal Types
 ========================================
 */
 
-export type ExerciseCategory =
-  | "strength"
-  | "cardio"
-  | "machine"
-  | "bodyweight"
-  | "mobility"
-  | "custom";
+export type ExerciseCategory = 'strength' | 'cardio' | 'machine' | 'bodyweight' | 'mobility' | 'custom'
 
-export type ExerciseEntryType =
-  | "strength_set"
-  | "cardio_session"
-  | "distance_session"
-  | "timed_hold"
-  | "bodyweight_set";
+export type ExerciseEntryType = 'strength_set' | 'cardio_session' | 'distance_session' | 'timed_hold' | 'bodyweight_set'
 
 /*
 ========================================
@@ -28,57 +17,57 @@ Core Tables
 */
 
 export interface WorkoutSession {
-  id?: number;
+    id?: number
 
-  // ISO string: 2026-05-02
-  date: string;
+    // ISO string: 2026-05-02
+    date: string
 
-  // Optional user-defined label
-  // Example: "Push Day", "Leg Day"
-  name?: string;
+    // Optional user-defined label
+    // Example: "Push Day", "Leg Day"
+    name?: string
 
-  notes?: string;
+    notes?: string
 
-  createdAt: string;
-  updatedAt: string;
+    createdAt: string
+    updatedAt: string
 }
 
 export interface ExerciseDefinition {
-  id?: number;
+    id?: number
 
-  // Example:
-  // "Dumbbell Curl"
-  // "Incline Bench Press"
-  // "Elliptical"
-  name: string;
+    // Example:
+    // "Dumbbell Curl"
+    // "Incline Bench Press"
+    // "Elliptical"
+    name: string
 
-  category: ExerciseCategory;
+    category: ExerciseCategory
 
-  // Optional display helper
-  // Example:
-  // "lbs"
-  // "minutes"
-  // "miles"
-  defaultUnit?: string;
+    // Optional display helper
+    // Example:
+    // "lbs"
+    // "minutes"
+    // "miles"
+    defaultUnit?: string
 
-  // User-created vs system seed data
-  isCustom: boolean;
+    // User-created vs system seed data
+    isCustom: boolean
 
-  createdAt: string;
+    createdAt: string
 }
 
 export interface SessionExercise {
-  id?: number;
+    id?: number
 
-  sessionId: number;
-  exerciseDefinitionId: number;
+    sessionId: number
+    exerciseDefinitionId: number
 
-  // Display order within the workout
-  order: number;
+    // Display order within the workout
+    order: number
 
-  notes?: string;
+    notes?: string
 
-  createdAt: string;
+    createdAt: string
 }
 
 /*
@@ -95,15 +84,15 @@ Leg Press
 */
 
 export interface StrengthSetPayload {
-  weight: number;
-  reps: number;
+    weight: number
+    reps: number
 
-  // Optional for RPE tracking
-  rpe?: number;
+    // Optional for RPE tracking
+    rpe?: number
 
-  // Optional tempo notation
-  // Example: "3-1-1"
-  tempo?: string;
+    // Optional tempo notation
+    // Example: "3-1-1"
+    tempo?: string
 }
 
 /*
@@ -114,17 +103,17 @@ Stairmaster
 */
 
 export interface CardioSessionPayload {
-  durationMinutes: number;
+    durationMinutes: number
 
-  // Example:
-  // resistance = 8
-  resistance?: number;
+    // Example:
+    // resistance = 8
+    resistance?: number
 
-  // Example:
-  // incline = 5
-  incline?: number;
+    // Example:
+    // incline = 5
+    incline?: number
 
-  caloriesBurned?: number;
+    caloriesBurned?: number
 }
 
 /*
@@ -136,12 +125,12 @@ Rowing
 */
 
 export interface DistanceSessionPayload {
-  durationMinutes?: number;
-  distance: number;
+    durationMinutes?: number
+    distance: number
 
-  // Example:
-  // mph / min-mile / kmh
-  pace?: string;
+    // Example:
+    // mph / min-mile / kmh
+    pace?: string
 }
 
 /*
@@ -152,7 +141,7 @@ Dead Hang
 */
 
 export interface TimedHoldPayload {
-  durationSeconds: number;
+    durationSeconds: number
 }
 
 /*
@@ -163,10 +152,10 @@ Dips
 */
 
 export interface BodyweightSetPayload {
-  reps: number;
+    reps: number
 
-  // Optional weighted bodyweight work
-  addedWeight?: number;
+    // Optional weighted bodyweight work
+    addedWeight?: number
 }
 
 /*
@@ -176,36 +165,36 @@ Discriminated Union
 */
 
 export interface StrengthSetEntry {
-  entryType: "strength_set";
-  payload: StrengthSetPayload;
+    entryType: 'strength_set'
+    payload: StrengthSetPayload
 }
 
 export interface CardioSessionEntry {
-  entryType: "cardio_session";
-  payload: CardioSessionPayload;
+    entryType: 'cardio_session'
+    payload: CardioSessionPayload
 }
 
 export interface DistanceSessionEntry {
-  entryType: "distance_session";
-  payload: DistanceSessionPayload;
+    entryType: 'distance_session'
+    payload: DistanceSessionPayload
 }
 
 export interface TimedHoldEntry {
-  entryType: "timed_hold";
-  payload: TimedHoldPayload;
+    entryType: 'timed_hold'
+    payload: TimedHoldPayload
 }
 
 export interface BodyweightSetEntry {
-  entryType: "bodyweight_set";
-  payload: BodyweightSetPayload;
+    entryType: 'bodyweight_set'
+    payload: BodyweightSetPayload
 }
 
 export type ExerciseEntryData =
-  | StrengthSetEntry
-  | CardioSessionEntry
-  | DistanceSessionEntry
-  | TimedHoldEntry
-  | BodyweightSetEntry;
+    | StrengthSetEntry
+    | CardioSessionEntry
+    | DistanceSessionEntry
+    | TimedHoldEntry
+    | BodyweightSetEntry
 
 /*
 ========================================
@@ -214,23 +203,23 @@ Persisted Exercise Entry Table
 */
 
 export interface ExerciseEntry {
-  id?: number;
+    id?: number
 
-  sessionExerciseId: number;
+    sessionExerciseId: number
 
-  /*
+    /*
   Stored separately for indexing/querying
   and narrowing TypeScript unions
   */
-  entryType: ExerciseEntryType;
+    entryType: ExerciseEntryType
 
-  /*
+    /*
   Flexible but strongly typed
   depending on entryType
   */
-  payload: ExerciseEntryData["payload"];
+    payload: ExerciseEntryData['payload']
 
-  createdAt: string;
+    createdAt: string
 }
 
 /*
@@ -240,56 +229,56 @@ Dexie Database
 */
 
 export class WorkoutLoggerDatabase extends Dexie {
-  sessions!: EntityTable<WorkoutSession, "id">;
-  exerciseDefinitions!: EntityTable<ExerciseDefinition, "id">;
-  sessionExercises!: EntityTable<SessionExercise, "id">;
-  exerciseEntries!: EntityTable<ExerciseEntry, "id">;
+    sessions!: EntityTable<WorkoutSession, 'id'>
+    exerciseDefinitions!: EntityTable<ExerciseDefinition, 'id'>
+    sessionExercises!: EntityTable<SessionExercise, 'id'>
+    exerciseEntries!: EntityTable<ExerciseEntry, 'id'>
 
-  constructor() {
-    super("WorkoutLoggerDatabase");
+    constructor() {
+        super('WorkoutLoggerDatabase')
 
-    this.version(1).stores({
-      /*
+        this.version(1).stores({
+            /*
       Sessions
       */
-      sessions: `
+            sessions: `
         ++id,
         date,
         name,
         createdAt
       `,
 
-      /*
+            /*
       Master Exercise Catalog
       */
-      exerciseDefinitions: `
+            exerciseDefinitions: `
         ++id,
         name,
         category,
         isCustom
       `,
 
-      /*
+            /*
       Session -> Exercise relationship
       */
-      sessionExercises: `
+            sessionExercises: `
         ++id,
         sessionId,
         exerciseDefinitionId,
         order
       `,
 
-      /*
+            /*
       Actual logged performance rows
       */
-      exerciseEntries: `
+            exerciseEntries: `
         ++id,
         sessionExerciseId,
         entryType,
         createdAt
       `,
-    });
-  }
+        })
+    }
 }
 
-export const db = new WorkoutLoggerDatabase();
+export const db = new WorkoutLoggerDatabase()
